@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>minoris</title>
+    <!-- 後述する表示画面3層の位置揃え -->
+    <style>
+      .canvas-wrapper {
+        position: relative;
+      }
+      .canvas-wrapper canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>
+      minoris
+    </h1>
+    <p>
+      minorisはかの有名なゲームTetrisを模したパズルゲームです。
+    </p>
+    <p>
+      基本的な操作は変わりませんが、modeによっては元祖Tetrisに存在しないブロックが落ちてくることがあります。是非お楽しみください。
+    </p>
+    <p></p>                                                                     <!-- 本文とmode選択の間の行間用 -->
+
+    <!-- mode選択。選択後は消滅 -->
+    <!-- mode--()関数は難易度を設定 -->
+    <!-- prepare()関数は下準備→ゲーム本体 -->
+    <p id = 'modechoicesentence'>まず難易度を選択してください</p>
+    <button id = 'modenormal' onclick = 'modeNormal(); prepare()'>normal</button>
+    <button id = 'modehard' onclick = 'modeHard(); prepare()'>hard</button>
+    <button id = 'modeexpert' onclick = 'modeExpert(); prepare()'>expert</button>
+    <button id = 'modeextreme' onclick = 'modeExtreme(); prepare()'>extreme</button>
+    <button id = 'modehyper' onclick = 'modeHyper(); prepare()'>hyper</button>
+    <!-- 描画部分 -->
+    <!-- 難易度選択後画面描画 -->
+    <!-- canvas1は下層レイヤーで再描画なし -->
+    <!-- canvas2は中層レイヤーで、ブロックの消滅と次のブロックの表示の際に再描画 -->
+    <!-- canvas3は上層レイヤーで移動中のブロックのみ描画 -->
+    <div class = "canvas-wrapper">
+      <canvas id="canvas1" width="0" height="0">
+        canvas要素をサポートしていません。
+      </canvas>
+      <canvas id="canvas2" width="0" height="0">
+        canvas要素をサポートしていません。
+      </canvas>
+      <canvas id="canvas3" width="0" height="0">
+        canvas要素をサポートしていません。
+      </canvas>
+    </div>
+
+    <!-- 以下操作方法の説明 -->
+    <div id = 'rule'>
+      <h2>
+        操作方法・ゲーム説明
+      </h2>
+      <ol>
+        <li>ASDで左右、下方向に移動</li>
+        <li>J,Kで回転</li>
+        <li>mode normalは元祖Tetris、hardは追加のブロックあり</li>
+      </ol>
+    </div>
+
+    <!-- global変数の定義 -->
+    <script>
+      let Now_Block = [];                                                       //Now_Block:操作するブロック形状の変数
+      let Total_Blocks = [];                                                    //Total_Blocks:積み重なったブロック。初期値0
+      let X = 5;                                                                //中心座標
+      let Y = 1;
+      let Score = 0;                                                            //score変数
+      let Mode = "";                                                            //難易度設定用変数
+
+      //ブロック形状Now_Blockは0-8の中の複数の数字が含まれる配列で表示される
+      //3×3のマス目に、左上を0とし時計回りに0-7の数字を当て中心に8の数字を当てることにより、数字の配列でブロックの形状を表すことを実現している
+      //例えば[0,1,2,8]はT字型のブロックであり、[1,4,5,8]はL字型のブロックである
+      //Total_Blocksは12×21の多重配列であり、要素は0,1である
+      //横10縦20マスの盤面を表しており、0のところは空、1のところにブロックがあるとしている
+      //左右の壁と下面に当たり判定をつけるため、配列は左右下に1マスずつ増やしてあり、初期値は周囲が1、中身は0である
+      //初期値例
+      //[[1,0,...,0,1]
+      // [1,0,...,0,1]
+      //      ...
+      // [1,0,...,0,1]
+      // [1,1,...,1,1]]
+      //Scoreはscoreの変数であり、ブロックが消えた際に加算される
+
+      //これらの変数はブロック落下のループとは別にキー操作によって呼び出す必要がある(Score,Modeを除く)ため、global変数にしている
+    </script>
+
+    <script src="minoris_mode.js"></script>                                     <!-- mode設定 -->
+    <script src="prepare.js"></script>                                          <!-- 準備 -->
+    <script src="minoris_body.js"></script>                                     <!-- 本体 -->
+    <script src='key_func.js'></script>                                         <!--　キー操作 -->
+
+  </body>
+
+</html>
